@@ -1,0 +1,10 @@
+make TARGET=zoul BOARD=remote-revb PORT=/dev/ttyUSB0
+
+sudo ip -6 addr add fd00:0:0:5000::1/64 dev eth0
+
+make TARGET=zoul PORT=/dev/ttyUSB0 connect-router
+
+make TARGET=cooja connect-router-cooja
+
+wget -6 "http://[fd00:0:0:5000::1]/"
+

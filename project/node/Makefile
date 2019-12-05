@@ -1,0 +1,36 @@
+CONTIKI_PROJECT = temp loudA loudB relay
+CONTIKI_TARGET_SOURCEFILES += adc-sensors.c
+all: $(CONTIKI_PROJECT)
+
+PLATFORMS_EXCLUDE = sky nrf52dk native simplelink
+
+CONTIKI_WITH_IPV6 = 1
+
+CONTIKI = ../..
+
+ # force Orchestra from command line
+MAKE_WITH_ORCHESTRA ?= 0
+# force Security from command line
+MAKE_WITH_SECURITY ?= 1
+ # print #routes periodically, used for regression tests
+MAKE_WITH_PERIODIC_ROUTES_PRINT ?= 0
+
+MAKE_MAC = MAKE_MAC_TSCH
+
+include $(CONTIKI)/Makefile.dir-variables
+# MODULES += $(CONTIKI_NG_SERVICES_DIR)/shell
+
+ifeq ($(MAKE_WITH_ORCHESTRA),1)
+MODULES += $(CONTIKI_NG_SERVICES_DIR)/orchestra
+endif
+
+ifeq ($(MAKE_WITH_SECURITY),1)
+CFLAGS += -DWITH_SECURITY=1
+endif
+
+ifeq ($(MAKE_WITH_PERIODIC_ROUTES_PRINT),1)
+CFLAGS += -DWITH_PERIODIC_ROUTES_PRINT=1
+endif
+
+
+include $(CONTIKI)/Makefile.include
